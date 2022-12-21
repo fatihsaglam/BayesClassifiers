@@ -126,12 +126,36 @@ mu_classes <- lapply(x_classes_numerics, function(m) {
 })
 names(mu_classes) <- class_names
 
-sd_classes <- lapply(x_classes_numerics, function(m) {
-  sd_temp <- apply(m, 2, sd)
-  sd_temp[sd_temp == 0 | sd_temp < sd_thresh] <- sd_thresh
-  return(sd_temp)
-})
-names(sd_classes) <- class_names
+
+if (var_equal) {
+
+
+  sd_classes <- list()
+  sd_all <- apply(x_numerics, 2, sd)
+  for (i in 1:k_classes) {
+
+  }
+dsfdsfdsfdsd
+
+
+
+
+  sd_classes <- lapply(x_classes_numerics, function(m) {
+    sd_temp <- apply(x_numerics, 2, sd)
+    sd_temp[sd_temp == 0 | sd_temp < sd_thresh] <- sd_thresh
+    return(sd_temp)
+  })
+  names(sd_classes) <- class_names
+} else {
+  sd_classes <- lapply(x_classes_numerics, function(m) {
+    sd_temp <- apply(m, 2, sd)
+    sd_temp[sd_temp == 0 | sd_temp < sd_thresh] <- sd_thresh
+    return(sd_temp)
+  })
+  names(sd_classes) <- class_names
+}
+
+
 
 results <- list(
   class_names = class_names,

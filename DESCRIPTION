@@ -1,11 +1,17 @@
 Package: BayesClassifiers
 Type: Package
-Title: What the Package Does (Title Case)
+Title: Naive and Non-Naive, clustered and non-clustered Bayes Classifiers
 Version: 0.1.0
-Author: Who wrote it
-Maintainer: The package maintainer <yourself@somewhere.net>
-Description: More about what it does (maybe more than one line)
-    Use four spaces when indenting paragraphs within the Description.
-License: What license is it under?
+Authors@R: 
+        c(person("Fatih", "Saglam", email = "saglamf89@gmail.com", 
+        role = c("aut", "cre"), 
+        comment = c(ORCID = "0000-0002-2084-2008")))
+Description: asdasd asad asdad asd.
+Depends: R (>= 4.2)
+Imports: 
+Suggests:
+LinkingTo: Rcpp
+License: MIT + file LICENSE
 Encoding: UTF-8
-LazyData: true
+LazyData: false
+RoxygenNote: 7.2.1

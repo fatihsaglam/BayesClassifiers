@@ -1,6 +1,6 @@
-#' @title  Synthetic Minority Oversampling Technique (SMOTE)
+#' @title  Gaussian Naive Bayes Classifier
 #'
-#' @description Resampling with SMOTE.
+#' @description Gaussian Naive Bayes Classifier.
 #'
 #' @param x asd
 #' @param y asd
@@ -9,25 +9,14 @@
 #' @param var_equal asd
 #'
 #' @details
-#' SMOTE (Chawla et al., 2002) is an oversampling method which creates links
-#' between positive samples and nearest neighbors and generates synthetic
-#' samples along that link.
+#' asd
 #'
-#' It is well known that SMOTE is sensitive to noisy data. It may create more
-#' noise.
-#'
-#' @return a list with resampled dataset.
-#'  \item{x}{asd}
-#'  \item{y}{asd}
+#' @return asd.
+#'  \item{asd}{asd}
 #'
 #' @author Fatih Saglam, saglamf89@gmail.com
 #'
 #' @importFrom  stats sd
-#'
-#' @references
-#' Chawla, N. V., Bowyer, K. W., Hall, L. O., & Kegelmeyer, W. P. (2002). SMOTE:
-#' synthetic minority over-sampling technique. Journal of artificial
-#' intelligence research, 16, 321-357.
 #'
 #' @rdname gaussian_nb
 #' @export
@@ -69,7 +58,6 @@ gaussian_nb <- function(
 
   # likelihood parameter estimations
   ## categorical variables
-
   pars_categoric <- list()
   if (p_factors > 0) {
     for (i in 1:k_class) {

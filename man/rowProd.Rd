@@ -2,9 +2,9 @@
 % Please edit documentation in R/rowProd.R
 \name{rowProd}
 \alias{rowProd}
-\title{Synthetic Minority Oversampling Technique (SMOTE)}
+\title{Row products}
 \usage{
-rowProd(X, prior)
+rowProd(X, prior = rep(1, ncol(X)))
 }
 \arguments{
 \item{X}{asd}
@@ -12,26 +12,14 @@ rowProd(X, prior)
 \item{prior}{asd}
 }
 \value{
-a list with resampled dataset.
- \item{x_new}{Resampled feature matrix.}
- \item{y_new}{Resampled target variable.}
- \item{C}{Number of synthetic samples for each positive class samples.}
+asd.
+ \item{asd}{asd.}
 }
 \description{
-Resampling with SMOTE.
+Row products
 }
 \details{
-SMOTE (Chawla et al., 2002) is an oversampling method which creates links
-between positive samples and nearest neighbors and generates synthetic
-samples along that link.
-
-It is well known that SMOTE is sensitive to noisy data. It may create more
-noise.
-}
-\references{
-Chawla, N. V., Bowyer, K. W., Hall, L. O., & Kegelmeyer, W. P. (2002). SMOTE:
-synthetic minority over-sampling technique. Journal of artificial
-intelligence research, 16, 321-357.
+asd
 }
 \author{
 Fatih Saglam, saglamf89@gmail.com

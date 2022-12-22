@@ -21,16 +21,6 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// rcpp_hello_world
-List rcpp_hello_world();
-RcppExport SEXP _BayesClassifiers_rcpp_hello_world() {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    rcpp_result_gen = Rcpp::wrap(rcpp_hello_world());
-    return rcpp_result_gen;
-END_RCPP
-}
 // rcpp_rowProd
 NumericVector rcpp_rowProd(NumericMatrix X, double prior);
 RcppExport SEXP _BayesClassifiers_rcpp_rowProd(SEXP XSEXP, SEXP priorSEXP) {
@@ -46,7 +36,6 @@ END_RCPP
 
 static const R_CallMethodDef CallEntries[] = {
     {"_BayesClassifiers_rcpp_divide_by_rowsum", (DL_FUNC) &_BayesClassifiers_rcpp_divide_by_rowsum, 1},
-    {"_BayesClassifiers_rcpp_hello_world", (DL_FUNC) &_BayesClassifiers_rcpp_hello_world, 0},
     {"_BayesClassifiers_rcpp_rowProd", (DL_FUNC) &_BayesClassifiers_rcpp_rowProd, 2},
     {NULL, NULL, 0}
 };

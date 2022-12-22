@@ -2,10 +2,14 @@
 # Generator token: 10BE3573-1514-4C36-9D1C-5A225CD40393
 
 rcpp_divide_by_rowsum <- function(X) {
-    .Call('_BayesClassifiers_rcpp_divide_by_rowsum', PACKAGE = 'BayesClassifiers', X)
+    .Call(`_BayesClassifiers_rcpp_divide_by_rowsum`, X)
+}
+
+rcpp_hello_world <- function() {
+    .Call(`_BayesClassifiers_rcpp_hello_world`)
 }
 
 rcpp_rowProd <- function(X, prior) {
-    .Call('_BayesClassifiers_rcpp_rowProd', PACKAGE = 'BayesClassifiers', X, prior)
+    .Call(`_BayesClassifiers_rcpp_rowProd`, X, prior)
 }
 

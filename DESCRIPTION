@@ -1,17 +1,14 @@
 Package: BayesClassifiers
 Type: Package
-Title: Naive and Non-Naive, clustered and non-clustered Bayes Classifiers
+Title: Naive and Non-Naive, Clustered and Non-Clustered Bayes Classifiers.
 Version: 0.1.0
-Authors@R: 
-        c(person("Fatih", "Saglam", email = "saglamf89@gmail.com", 
-        role = c("aut", "cre"), 
-        comment = c(ORCID = "0000-0002-2084-2008")))
-Description: asdasd asad asdad asd.
-Depends: R (>= 4.2)
-Imports: 
-Suggests:
-LinkingTo: Rcpp
+Date: 2022-12-22
+Author: Fatih Sağlam
+Maintainer: Fatih Sağlam <saglamf89@gmail.com>
+Description: Naive and Non-Naive, Clustered and Non-Clustered Bayes Classifiers.
 License: MIT + file LICENSE
+Imports: 
+    Rcpp
+LinkingTo: Rcpp
 Encoding: UTF-8
-LazyData: false
 RoxygenNote: 7.2.1

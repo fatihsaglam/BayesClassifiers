@@ -1,14 +1,18 @@
 Package: BayesClassifiers
 Type: Package
-Title: Naive and Non-Naive, Clustered and Non-Clustered Bayes Classifiers.
-Version: 0.1.0
+Title: Naive and Non-Naive, Clustered and Non-Clustered Bayes Classifiers
+Version: 0.1.1
 Date: 2022-12-22
 Author: Fatih Sağlam
 Maintainer: Fatih Sağlam <saglamf89@gmail.com>
 Description: Naive and Non-Naive, Clustered and Non-Clustered Bayes Classifiers.
 License: MIT + file LICENSE
 Imports: 
+    stats,
+    Rcpp,
+    ks,
+    mvnfast
+LinkingTo: 
     Rcpp
-LinkingTo: Rcpp
 Encoding: UTF-8
 RoxygenNote: 7.2.1

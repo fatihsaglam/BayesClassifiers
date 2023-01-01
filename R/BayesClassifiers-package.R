@@ -1,5 +1,5 @@
 ## usethis namespace: start
+#' @import Rcpp
 #' @useDynLib BayesClassifiers, .registration = TRUE
-#' @importFrom Rcpp evalCpp
 ## usethis namespace: end
 NULL

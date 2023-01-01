@@ -1,6 +1,6 @@
-#' @title  Predict Gaussian Naive Bayes
+#' @title  Predict Multivariate Kernel Bayes
 #'
-#' @description Predicts class labels or probabilities for Gaussian Naive Bayes.
+#' @description Predicts class labels or probabilities for Multivariate Kernel Bayes.
 #'
 #' @param object asd
 #' @param newdata asd
@@ -15,12 +15,12 @@
 #'
 #' @author Fatih Saglam, saglamf89@gmail.com
 #'
-#' @importFrom stats dnorm
-#'
-#' @rdname predict.gaussian_nb
+#' @rdname predict.mvkernel_b
 #' @export
 
-predict.gaussian_nb <- function(object, newdata, type = "pred", ...) {
+
+predict.mvkernel_b <- function(object, newdata, type = "pred", ...) {
+
   if (isFALSE(type %in% c("pred", "prob"))) {
     stop("Type must be pred or prob")
   }
@@ -36,6 +36,7 @@ predict.gaussian_nb <- function(object, newdata, type = "pred", ...) {
   priors <- object$priors
   pars_categoric <- object$pars_categoric
   pars_numeric <- object$pars_numeric
+  x_classes_numeric <- object$x_classes_numerics
 
   x <- newdata
   n <- nrow(x)
@@ -44,7 +45,7 @@ predict.gaussian_nb <- function(object, newdata, type = "pred", ...) {
 
   likelihood_list <- vector(mode = "list", length = k_class)
   for (i in 1:k_class) {
-    likelihood_list[[i]] <- matrix(data = NA, nrow = n, ncol = p)
+    likelihood_list[[i]] <- matrix(data = NA, nrow = n, ncol = p_factors + 1)
   }
 
   # categorical marginal densities
@@ -58,12 +59,10 @@ predict.gaussian_nb <- function(object, newdata, type = "pred", ...) {
     }
   }
 
-  # numerical gaussian marginal densities
+  # numerical densities
   if (p_numerics > 0) {
-    for (i in 1:p_numerics) {
-      for (j in 1:k_class) {
-        likelihood_list[[j]][,i_numerics[i]] <- dnorm(x = x_numerics[,i], mean = pars_numeric[[j]]$mu[i], sd = pars_numeric[[j]]$sd[i])
-      }
+    for (i in 1:k_class) {
+      likelihood_list[[i]][,p_factors + 1] <- ks::kde(x = x_classes_numeric[[i]], h = pars_numeric[[i]]$bw, eval.points = x_numerics)$estimate
     }
   }
 
@@ -79,5 +78,5 @@ predict.gaussian_nb <- function(object, newdata, type = "pred", ...) {
     predictions <- factor(class_names[max.col(posterior)], levels = class_names, labels = class_names)
     return(predictions)
   }
-}
 
+}

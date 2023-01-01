@@ -1,6 +1,6 @@
-#' @title  Predict Gaussian Naive Bayes
+#' @title  Predict Kernel Naive Bayes
 #'
-#' @description Predicts class labels or probabilities for Gaussian Naive Bayes.
+#' @description Predicts class labels or probabilities for Kernel Naive Bayes.
 #'
 #' @param object asd
 #' @param newdata asd
@@ -15,12 +15,12 @@
 #'
 #' @author Fatih Saglam, saglamf89@gmail.com
 #'
-#' @importFrom stats dnorm
-#'
-#' @rdname predict.gaussian_nb
+#' @rdname predict.kernel_nb
 #' @export
 
-predict.gaussian_nb <- function(object, newdata, type = "pred", ...) {
+
+predict.kernel_nb <- function(object, newdata, type = "pred", ...) {
+
   if (isFALSE(type %in% c("pred", "prob"))) {
     stop("Type must be pred or prob")
   }
@@ -36,6 +36,7 @@ predict.gaussian_nb <- function(object, newdata, type = "pred", ...) {
   priors <- object$priors
   pars_categoric <- object$pars_categoric
   pars_numeric <- object$pars_numeric
+  x_classes_numeric <- object$x_classes_numerics
 
   x <- newdata
   n <- nrow(x)
@@ -60,10 +61,10 @@ predict.gaussian_nb <- function(object, newdata, type = "pred", ...) {
 
   # numerical gaussian marginal densities
   if (p_numerics > 0) {
-    for (i in 1:p_numerics) {
-      for (j in 1:k_class) {
-        likelihood_list[[j]][,i_numerics[i]] <- dnorm(x = x_numerics[,i], mean = pars_numeric[[j]]$mu[i], sd = pars_numeric[[j]]$sd[i])
-      }
+    for (i in 1:k_class) {
+      likelihood_list[[i]][,i_numerics] <- sapply(1:p_numerics, function(m) {
+        ks::kde(x = x_classes_numeric[[i]][,m], h = pars_numeric[[i]]$bw[m], eval.points = x_numerics[,m])$estimate
+      })
     }
   }
 
@@ -80,4 +81,3 @@ predict.gaussian_nb <- function(object, newdata, type = "pred", ...) {
     return(predictions)
   }
 }
-

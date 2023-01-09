@@ -1,7 +1,7 @@
 Package: BayesClassifiers
 Type: Package
 Title: Naive and Non-Naive, Clustered and Non-Clustered Bayes Classifiers
-Version: 0.1.1
+Version: 0.1.2
 Date: 2022-12-22
 Author: Fatih Sağlam
 Maintainer: Fatih Sağlam <saglamf89@gmail.com>
@@ -11,7 +11,8 @@ Imports:
     stats,
     Rcpp,
     ks,
-    mvnfast
+    mvnfast,
+    VineCopula
 LinkingTo: 
     Rcpp
 Encoding: UTF-8

@@ -1,6 +1,6 @@
-#' @title  Predict Kernel Naive Bayes
+#' @title  Predict Copula Bayes Classifier with Gaussian marginals
 #'
-#' @description Predicts class labels or probabilities for Kernel Naive Bayes.
+#' @description Predicts class labels or probabilities for Copula Bayes Classifier with Gaussian marginals.
 #'
 #' @param object asd
 #' @param newdata asd
@@ -15,15 +15,12 @@
 #'
 #' @author Fatih Saglam, saglamf89@gmail.com
 #'
-#' @rdname predict.kernel_nb
+#' @importFrom  VineCopula RVinePDF
+#'
+#' @rdname predict.copula_gaussian_b
 #' @export
 
-
-predict.kernel_nb <- function(object, newdata, type = "pred", ...) {
-
-  if (isFALSE(type %in% c("pred", "prob"))) {
-    stop("Type must be pred or prob")
-  }
+predict.copula_gaussian_b <- function(object, newdata, type = "pred", ...) {
 
   # read object
   p <- object$p
@@ -34,14 +31,18 @@ predict.kernel_nb <- function(object, newdata, type = "pred", ...) {
   class_names <- object$class_names
   k_class <- object$k_class
   priors <- object$priors
+  k_factors <- object$k_factors
   pars_categoric <- object$pars_categoric
   pars_numeric <- object$pars_numeric
-  x_classes_numeric <- object$x_classes_numerics
+  pars_scale <- object$pars_scale
 
   x <- newdata
   n <- nrow(x)
   x_factors <- x[,i_factors]
   x_numerics <- as.matrix(x[,i_numerics])
+  x_numerics <- scale(x_numerics, pars_scale$mean, pars_scale$sd)
+  # scaling into (0,1) range
+  x_numerics_scaled <- 1/(1 + exp(-x_numerics))
 
   likelihood_list <- vector(mode = "list", length = k_class)
   for (i in 1:k_class) {
@@ -59,12 +60,18 @@ predict.kernel_nb <- function(object, newdata, type = "pred", ...) {
     }
   }
 
-  # numerical kernel marginal densities
+  # numerical gaussian marginal densities
   if (p_numerics > 0) {
-    for (i in 1:k_class) {
-      likelihood_list[[i]][,i_numerics] <- sapply(1:p_numerics, function(m) {
-        ks::kde(x = x_classes_numeric[[i]][,m], h = pars_numeric[[i]]$bw[m], eval.points = x_numerics[,m])$estimate
-      })
+    c_list <- list()
+    for (i in 1:p_numerics) {
+      for (j in 1:k_class) {
+        likelihood_list[[j]][,i_numerics[i]] <- dnorm(x = x_numerics_scaled[,i], mean = pars_numeric[[j]]$mu[i], sd = pars_numeric[[j]]$sd[i])
+      }
+    }
+    ## copula function
+    for (j in 1:k_class) {
+      c_list[[j]] <- VineCopula::RVinePDF(newdata = x_numerics_scaled, RVM = pars_numeric[[j]]$copula)
+      likelihood_list[[j]] <- cbind(likelihood_list[[j]], c_list[[j]])
     }
   }
 

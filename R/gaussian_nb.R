@@ -70,7 +70,6 @@ gaussian_nb <- function(
     }
     names(pars_categoric) <- class_names
   }
-  pars_categoric
 
   ## numerical variables
   pars_numeric <- list()

@@ -28,7 +28,7 @@ predict.mvgaussian_b <- function(object, newdata, type = "pred", ...) {
   }
 
   # read object
-  p <- object$p
+  # p <- object$p
   i_factors <- object$i_factors
   p_factors <- object$p_factors
   i_numerics <- object$i_numerics
@@ -38,7 +38,6 @@ predict.mvgaussian_b <- function(object, newdata, type = "pred", ...) {
   priors <- object$priors
   pars_categoric <- object$pars_categoric
   pars_numeric <- object$pars_numeric
-  x_classes_numeric <- object$x_classes_numerics
 
   x <- newdata
   n <- nrow(x)
@@ -64,7 +63,7 @@ predict.mvgaussian_b <- function(object, newdata, type = "pred", ...) {
   # numerical densities
   if (p_numerics > 0) {
     for (i in 1:k_class) {
-      likelihood_list[[i]][,p_factors + 1] <- mvnfast::dmvn(X = as.matrix(x), mu = pars_numeric[[i]]$mu, sigma = pars_numeric[[i]]$Sigma)
+      likelihood_list[[i]][,p_factors + 1] <- dmvn(X = as.matrix(x_numerics), mu = pars_numeric[[i]]$mu, sigma = pars_numeric[[i]]$Sigma)
     }
   }
 
@@ -74,11 +73,11 @@ predict.mvgaussian_b <- function(object, newdata, type = "pred", ...) {
 
   if (type == "prob") {
     posterior <- divide_by_rowsum(posterior)
+    colnames(posterior) <- class_names
     return(posterior)
   }
   if (type == "pred") {
     predictions <- factor(class_names[max.col(posterior)], levels = class_names, labels = class_names)
     return(predictions)
   }
-
 }

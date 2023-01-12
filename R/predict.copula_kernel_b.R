@@ -86,6 +86,7 @@ predict.copula_kernel_b <- function(object, newdata, type = "pred", ...) {
 
   if (type == "prob") {
     posterior <- divide_by_rowsum(posterior)
+    colnames(posterior) <- class_names
     return(posterior)
   }
   if (type == "pred") {

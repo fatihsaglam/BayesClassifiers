@@ -73,6 +73,7 @@ predict.gaussian_nb <- function(object, newdata, type = "pred", ...) {
 
   if (type == "prob") {
     posterior <- divide_by_rowsum(posterior)
+    colnames(posterior) <- class_names
     return(posterior)
   }
   if (type == "pred") {

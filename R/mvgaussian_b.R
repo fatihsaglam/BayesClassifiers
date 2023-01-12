@@ -16,10 +16,6 @@
 #' @author Fatih Saglam, saglamf89@gmail.com
 #'
 #' @importFrom stats cov
-#' @importFrom ks Hnm
-#' @importFrom ks Hucv
-#' @importFrom ks Hns
-#' @importFrom ks Hpi
 #'
 #' @rdname mvgaussian_b
 #' @export
@@ -30,6 +26,7 @@ mvgaussian_b <- function(
     y,
     laplace = 0,
     Sigma_equal = FALSE) {
+
   p <- ncol(x)
   n <- nrow(x)
 

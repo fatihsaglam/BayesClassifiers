@@ -15,6 +15,8 @@
 #'
 #' @author Fatih Saglam, saglamf89@gmail.com
 #'
+#' @importFrom ks kde
+#'
 #' @rdname predict.mvkernel_b
 #' @export
 
@@ -62,7 +64,9 @@ predict.mvkernel_b <- function(object, newdata, type = "pred", ...) {
   # numerical densities
   if (p_numerics > 0) {
     for (i in 1:k_class) {
-      likelihood_list[[i]][,p_factors + 1] <- ks::kde(x = x_classes_numeric[[i]], h = pars_numeric[[i]]$bw, eval.points = x_numerics)$estimate
+      likelihood_list[[i]][,p_factors + 1] <- kde(x = x_classes_numeric[[i]],
+                                                  h = pars_numeric[[i]]$bw,
+                                                  eval.points = x_numerics)$estimate
     }
   }
 
@@ -72,10 +76,12 @@ predict.mvkernel_b <- function(object, newdata, type = "pred", ...) {
 
   if (type == "prob") {
     posterior <- divide_by_rowsum(posterior)
+    colnames(posterior) <- class_names
     return(posterior)
   }
   if (type == "pred") {
-    predictions <- factor(class_names[max.col(posterior)], levels = class_names, labels = class_names)
+    predictions <- factor(class_names[max.col(posterior)], levels = class_names,
+                          labels = class_names)
     return(predictions)
   }
 

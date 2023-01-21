@@ -20,7 +20,6 @@
 #' @rdname predict.mvgaussian_b
 #' @export
 
-
 predict.mvgaussian_b <- function(object, newdata, type = "pred", ...) {
 
   if (isFALSE(type %in% c("pred", "prob"))) {
@@ -63,7 +62,9 @@ predict.mvgaussian_b <- function(object, newdata, type = "pred", ...) {
   # numerical densities
   if (p_numerics > 0) {
     for (i in 1:k_class) {
-      likelihood_list[[i]][,p_factors + 1] <- dmvn(X = as.matrix(x_numerics), mu = pars_numeric[[i]]$mu, sigma = pars_numeric[[i]]$Sigma)
+      likelihood_list[[i]][,p_factors + 1] <- dmvn(X = as.matrix(x_numerics),
+                                                   mu = pars_numeric[[i]]$mu,
+                                                   sigma = pars_numeric[[i]]$Sigma)
     }
   }
 

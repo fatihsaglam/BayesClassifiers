@@ -35,7 +35,7 @@ predict.cl_mvgaussian_b <- function(object, newdata, type = "pred", ...) {
   x <- newdata
   n <- nrow(x)
 
-  m_prob_cluster <- BayesClassifiers:::predict.mvgaussian_b(object = object, newdata = x, type = "prob")
+  m_prob_cluster <- predict.mvgaussian_b(object = object, newdata = x, type = "prob")
 
   posterior <- matrix(data = NA, nrow = n, ncol = k_class_original)
 

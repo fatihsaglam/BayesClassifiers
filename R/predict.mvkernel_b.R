@@ -22,13 +22,12 @@
 
 
 predict.mvkernel_b <- function(object, newdata, type = "pred", ...) {
-
   if (isFALSE(type %in% c("pred", "prob"))) {
     stop("Type must be pred or prob")
   }
 
   # read object
-  p <- object$p
+  # p <- object$p
   i_factors <- object$i_factors
   p_factors <- object$p_factors
   i_numerics <- object$i_numerics
@@ -84,5 +83,4 @@ predict.mvkernel_b <- function(object, newdata, type = "pred", ...) {
                           labels = class_names)
     return(predictions)
   }
-
 }

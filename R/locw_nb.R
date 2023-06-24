@@ -1,8 +1,9 @@
 locw_nb <- function(x, y, k = 50){
   n <- nrow(x)
+  p <- ncol(x)
 
   class_names <- unique(y)
-  k_classes <- length(class_names)
+  k_class <- length(class_names)
 
   n <- nrow(x)
   n_classes <- sapply(class_names, function(m) sum(y == m))
@@ -10,72 +11,77 @@ locw_nb <- function(x, y, k = 50){
   priors_normal <- n_classes/n
 
   results <- list(n = n,
+                  p = p,
                   x = x,
                   y = y,
                   n_classes = n_classes,
-                  k_classes = k_classes,
+                  k_class = k_class,
                   class_names = class_names,
                   k = k)
   class(results) <- "locw_nb"
   return(results)
 }
 
-predict.locw_nb <- function(object, newdata, type = "prob"){
+predict.locw_nb <- function(object, newdata, type = "prob", sd_thresh = 1e-8, laplace = 0){
   n <- object$n
+  p <- object$p
   x <- object$x
   y <- object$y
+
   n_classes <- object$n_classes
-  k_classes <- object$k_classes
+  k_class <- object$k_class
   class_names <- object$class_names
   k <- object$k
 
   x_test <- newdata
   n_test <- nrow(x_test)
 
-  posteriors_all <- matrix(NA, nrow = n_test, ncol = k_classes)
+  posteriors_all <- matrix(NA, nrow = n_test, ncol = k_class)
 
   for (i in 1:n_test) {
     x_selected <- x_test[i,,drop = FALSE]
 
-    m_nb <- RANN::nn2(data = as.matrix(x), query = as.matrix(x_selected), k = pmin(k, n))
-    nb_dists <- m_nb$nn.dists
-    nb_index <- m_nb$nn.idx
+    m_nn <- RANN::nn2(data = as.matrix(x), query = as.matrix(x_selected), k = pmin(k, n))
+    nn_dists <- m_nn$nn.dists
+    nn_index <- m_nn$nn.idx
 
-    x_selected <- x[nb_index,]
-    y_selected <- y[nb_index]
+    x_selected <- x[nn_index,]
+    y_selected <- y[nn_index]
 
-    weights <- nb_dists/max(nb_dists)
-
+    weights <- nn_dists/max(nn_dists)
     weights <- weights*k/sum(weights) ### niyesini anlamadım. ağırlıkların toplamını k yapıyor.
+
     x_selected_classes <- lapply(class_names, function(m) x_selected[y_selected == m,,drop = FALSE])
 
     weights_classes <- lapply(class_names, function(m) weights[y_selected == m])
 
-    means <- lapply(1:k_classes, function(m2) sapply(1:p, function(m) {
+    means <- lapply(1:k_class, function(m2) sapply(1:p, function(m) {
       ww <- weights_classes[[m2]]/sum(weights_classes[[m2]])*n_test
       Hmisc::wtd.mean(x = x_selected_classes[[m2]][,m,drop = FALSE], weights = ww, na.rm = TRUE)
     }))
 
-    stds <- lapply(1:k_classes, function(m2) sapply(1:p, function(m) {
+    stds <- lapply(1:k_class, function(m2) sapply(1:p, function(m) {
       ww <- weights_classes[[m2]]/sum(weights_classes[[m2]])*n_test
       sdsd <- sqrt(Hmisc::wtd.var(x = x_selected_classes[[m2]][,m,drop = FALSE], weights = ww, na.rm = TRUE))
-      sdsd[sdsd == 0] <- 1e-20
+      sdsd[sdsd == 0 | sdsd < sd_thresh | is.na(sdsd)] <- sd_thresh
       return(sdsd)
     }))
 
-    priors <- sapply(weights_classes, sum)/sum(weights)
-    likelihoods <- t(sapply(1:k_classes, function(m) dnorm(x = unlist(x_selected), mean = means[[m]], sd = stds[[m]])))
+    priors <- (sapply(weights_classes, sum) + laplace)/(sum(weights) + laplace*k_class)
 
-    priors[is.nan(priors)] <- 1e-20
-    priors[is.na(priors)] <- 1e-20
-    priors[is.infinite(priors)] <- 1e100-20
-    priors <- priors/sum(priors)
+    likelihoods <- lapply(1:k_class, function(m) {
+      ll <- sapply(1:p, function(mm) {
+        dnorm(x = x_selected[,mm], mean = means[[m]], sd = stds[[m]])
+      })
 
-    likelihoods[is.nan(likelihoods)] <- 1e-20
-    likelihoods[is.na(likelihoods)] <- 1e-20
-    likelihoods[is.infinite(likelihoods)] <- 1e100
+      ll[is.na(ll)] <- 0
+      return(ll)
+    })
 
-    posteriors <- apply(cbind(priors, likelihoods), 1, prod)
+    posteriors <- sapply(1:k_class, function(m) {
+      apply(cbind(priors[m], likelihoods[[m]]), 1, prod)
+    })
+
     if(all(posteriors == 0)){
       posteriors <- runif(length(posteriors), min = 0.49, max = 0.51)
     }

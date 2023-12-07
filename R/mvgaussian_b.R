@@ -20,7 +20,6 @@
 #' @rdname mvgaussian_b
 #' @export
 
-
 mvgaussian_b <- function(
     x,
     y,
@@ -100,6 +99,7 @@ mvgaussian_b <- function(
     pars_numeric = pars_numeric,
     x_classes_numerics = x_classes_numerics
   )
+
   class(results) <- "mvgaussian_b"
   return(results)
 }

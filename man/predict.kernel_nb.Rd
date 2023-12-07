@@ -18,6 +18,8 @@
 \value{
 asd.
  \item{asd}{asd}
+
+ @importFrom ks kde
 }
 \description{
 Predicts class labels or probabilities for Kernel Naive Bayes.

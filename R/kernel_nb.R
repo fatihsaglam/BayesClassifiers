@@ -93,7 +93,10 @@ kernel_nb <- function(
   if (p_numerics > 0) {
     for (i in 1:k_class) {
       pars_numeric[[i]] <- list()
-      pars_numeric[[i]]$bw <- apply(x_classes_numerics[[i]], 2, f_bw)*bw_adjust
+      sds <- apply(x_classes_numerics[[i]], 2, sd)
+      nonzeroSD <- sds != 0
+      pars_numeric[[i]]$bw <- rep(0, p)
+      pars_numeric[[i]]$bw[nonzeroSD] <- apply(x_classes_numerics[[i]][,nonzeroSD, drop = FALSE], 2, f_bw)*bw_adjust
       pars_numeric[[i]]$bw[pars_numeric[[i]]$bw == 0 | pars_numeric[[i]]$bw < bw_thresh] <- bw_thresh
     }
     names(pars_numeric) <- class_names

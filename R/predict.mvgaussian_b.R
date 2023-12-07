@@ -63,16 +63,18 @@ predict.mvgaussian_b <-
         }
       }
     }
-
+    # numerical densities
     # numerical densities
     if (p_numerics > 0) {
       for (i in 1:k_class) {
+        pars_numeric[[i]]$Sigma[pars_numeric[[i]]$Sigma < 1e-8] <- 1e-8
         likelihood_list[[i]][, p_factors + 1] <-
-          dmvn(
-            X = as.matrix(x_numerics),
-            mu = pars_numeric[[i]]$mu,
+          mvtnorm::dmvnorm(
+            x = as.matrix(x_numerics),
+            mean = pars_numeric[[i]]$mu,
             sigma = pars_numeric[[i]]$Sigma
           )
+        likelihood_list[[i]][,p_factors + 1][likelihood_list[[i]] < 1e-50] <- 1e-50
       }
     }
 

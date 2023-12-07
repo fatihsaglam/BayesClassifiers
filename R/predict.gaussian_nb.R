@@ -63,6 +63,7 @@ predict.gaussian_nb <- function(object, newdata, type = "pred", ...) {
     for (i in 1:p_numerics) {
       for (j in 1:k_class) {
         likelihood_list[[j]][,i_numerics[i]] <- dnorm(x = x_numerics[,i], mean = pars_numeric[[j]]$mu[i], sd = pars_numeric[[j]]$sd[i])
+        likelihood_list[[j]][,i_numerics[i]][likelihood_list[[j]][,i_numerics[i]] < 1e-50] <- 1e-50
       }
     }
   }

@@ -1,4 +1,24 @@
-
+#' @title  Predict Clustered Multivariate Kernel Bayes
+#'
+#' @description Predicts class labels or probabilities for Clustered Multivariate Kernel Bayes.
+#'
+#' @param object asd
+#' @param newdata asd
+#' @param type asd
+#' @param ... asd
+#'
+#' @details
+#' asd
+#'
+#' @return asd.
+#'  \item{asd}{asd}
+#'
+#' @author Fatih Saglam, saglamf89@gmail.com
+#'
+#' @importFrom stats dnorm
+#'
+#' @rdname predict.cl_mvkernel_b
+#' @export
 
 predict.cl_mvkernel_b <- function(object, newdata, type = "pred", ...) {
 

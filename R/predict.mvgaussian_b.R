@@ -67,7 +67,7 @@ predict.mvgaussian_b <-
     # numerical densities
     if (p_numerics > 0) {
       for (i in 1:k_class) {
-        pars_numeric[[i]]$Sigma[pars_numeric[[i]]$Sigma < 1e-8] <- 1e-8
+        pars_numeric[[i]]$Sigma[abs(pars_numeric[[i]]$Sigma) < 1e-8] <- 1e-8
         likelihood_list[[i]][, p_factors + 1] <-
           mvtnorm::dmvnorm(
             x = as.matrix(x_numerics),
